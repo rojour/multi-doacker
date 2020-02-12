@@ -10,7 +10,7 @@ script:
 
 after_success:
   - docker build -t rojour/multi-client ./client
-  - docker build -t rojour/multi-nginx ./mginx
+  - docker build -t rojour/multi-nginx ./nginx
   - docker build -t rojour/multi-server ./server
   - docker build -t rojour/multi-worker ./worker
   # Log in to the docker CLI

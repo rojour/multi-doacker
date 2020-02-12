@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t rojour/react-test -f./cleint/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true rojour/react-test npm test
+
+after_success:
+  - docker build -t rojour/multi-client ./client
+  - docker build -t rojour/multi-nginx ./mginx
+  - docker build -t rojour/multi-server ./server
+  - docker build -t rojour/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those image and push them to docker hub
+  - docker push rojour/multi-client
+  - docker push rojour/multi-nginx
+  - docker push rojour/multi-server
+  - docker push rojour/multi-worker
